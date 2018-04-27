@@ -167,6 +167,49 @@ node {
 
 That's the entirety of our pipeline specification for Jenkins. Now, we'll just need to tell Jenkins two things:
 
-Where to find our code
-What credentials to use to publish the Docker image
+- Where to find our code
+- What credentials to use to publish the Docker image
 
+## CONFIGURING DOCKER HUB WITH JENKINS
+
+To store the Docker image resulting from our build, we'll be using Docker Hub. You can sign up for a free account at https://hub.docker.com.
+
+We'll need to give Jenkins access to push the image to Docker Hub. For this, we'll create Credentials in Jenkins, and refer to them in the Jenkinsfile.
+
+As you might have noticed in the above Jenkinsfile, we're using docker.withRegistry to wrap the app.push commands - this instructs Jenkins to log in to a specified registry with the specified credential id (docker-hub-credentials).
+
+    On the Jenkins front page, click on Credentials -> System -> Global credentials -> Add Credentials
+
+    Add your Docker Hub credentials as the type Username with password, with the ID docker-hub-credentials
+
+## CREATING A JOB IN JENKINS
+
+The final thing we need to tell Jenkins is how to find our repository. We'll create a Pipeline job, and point Jenkins to use a Jenkinsfile in our repository.
+
+Here are the steps:
+
+```
+Click on New Item on the Jenkins front page.
+Type a name for your project, and select Pipeline as the project type.
+Select Poll SCM and enter a polling schedule. The example here, H/5 * * * * will poll the Git repository every five minutes.
+```
+
+Note that I am polling for changes in this example. If your repo is in Github, a much better approach is to set up webhooks.
+
+    For the pipeline definition, choose Pipeline script from SCM, and tell Jenkins how to find your repository.
+
+Finally, press Save and your pipeline is ready!
+
+To build it, press Build Now. After a few minutes you should see an image appear in your Docker Hub repository, and something like this on the page of your new Jenkins job.
+
+
+We have successfully containerised an application, and set up a Jenkins job to build and publish the image on every change to a repository.
+
+## DEPLOYMENT
+The next logical step in the pipeline would be to deploy the container automatically into a testing environment. For this, we could use something like Amazon Elastic Container Service or Rancher.
+
+## TESTING
+As you might have noticed in the Jenkinsfile, our approach to testing so far is rather non-exhaustive. Integrating comprehensive unit, acceptance and NFR testing into our pipeline would take us much closer to Continuous Delivery.
+
+## MONITORING
+We've already added a health check in our Dockerfile. We should utilise that to monitor the health of the application, and try to fix it automatically if it's unhealthy. We should also ship all logs from the container somewhere to be stored and analysed. 
