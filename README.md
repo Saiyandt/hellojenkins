@@ -11,7 +11,7 @@ To run through this guide, you will need the following:
 
 ## Our application
 For this guide, we'll be using a very basic example: a Hello World server written with Node. Place this in a main.js:
-
+```
 // load the http module
 var http = require('http');
 
@@ -24,9 +24,9 @@ var server = http.createServer(function (request, response) {
 // listen on localhost:8000
 server.listen(8000);
 console.log("Server listening at http://127.0.0.1:8000/");
-
+```
 We'll also need a package.json, which tells Node some basic things about our application:
-
+```
 {
   "name": "getintodevops-hellonode",
   "version": "1.0.0",
@@ -38,15 +38,15 @@ We'll also need a package.json, which tells Node some basic things about our app
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/getintodevops/hellonode/"
+    "url": "https://github.com/Saiyandt/hellojenkins/"
   },
   "keywords": [
     "node",
     "docker",
     "dockerfile"
   ],
-  "author": "miiro@getintodevops.com",
-  "license": "ISC"
+  "author": "Thuy Nguyen",
+  "license": "MIT"
 }
-
+```
 
